@@ -10,7 +10,6 @@ type Notifier interface {
 }
 
 type notifier struct {
-	sync.RWMutex
 	current *state
 }
 
@@ -21,13 +20,9 @@ func New() Notifier {
 }
 
 func (n *notifier) Notify() {
-	n.Lock()
-	defer n.Unlock()
 	n.current = n.current.update()
 }
 
 func (n *notifier) Listen() Listener {
-	n.RLock()
-	defer n.RUnlock()
 	return newListener(n.current)
 }
