@@ -6,6 +6,8 @@ import (
 
 type Listener interface {
 	Check() bool
+	Wait() <-chan struct{}
+	Advance()
 }
 
 type listener struct {
@@ -29,4 +31,16 @@ func (l *listener) Check() bool {
 	l.last = current
 	l.Unlock()
 	return true
+}
+
+func (l *listener) Wait() <-chan struct{} {
+	l.Lock()
+	defer l.Unlock()
+	return l.last.done
+}
+
+func (l *listener) Advance() {
+	l.Lock()
+	l.last = l.last.getCurrent()
+	l.Unlock()
 }
