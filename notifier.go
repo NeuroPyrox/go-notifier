@@ -1,9 +1,5 @@
 package notifier
 
-import (
-	"sync"
-)
-
 type Notifier interface {
 	Notify()
 	Listen() Listener

@@ -1,9 +1,5 @@
 package notifier
 
-import (
-	"sync"
-)
-
 type Listener interface {
 	Check() bool
 	Wait() <-chan struct{}
@@ -34,7 +30,5 @@ func (l *listener) Wait() <-chan struct{} {
 }
 
 func (l *listener) Advance() {
-	l.Lock()
 	l.last = l.last.getCurrent()
-	l.Unlock()
 }
